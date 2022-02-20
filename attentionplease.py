@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import detectEmotion
 
 
 class Ui_Dialog(object):
@@ -64,6 +65,7 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
+        emoCount = detectEmotion.scanEmotions()
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
         item = self.tableWidget.verticalHeaderItem(0)
@@ -85,19 +87,19 @@ class Ui_Dialog(object):
         __sortingEnabled = self.tableWidget.isSortingEnabled()
         self.tableWidget.setSortingEnabled(False)
         item = self.tableWidget.item(0, 0)
-        item.setText(_translate("Dialog", "0"))
+        item.setText(_translate("Dialog", str(emoCount["angry"])))
         item = self.tableWidget.item(1, 0)
-        item.setText(_translate("Dialog", "0"))
+        item.setText(_translate("Dialog", str(emoCount["disgust"])))
         item = self.tableWidget.item(2, 0)
-        item.setText(_translate("Dialog", "0"))
+        item.setText(_translate("Dialog", str(emoCount["fear"])))
         item = self.tableWidget.item(3, 0)
-        item.setText(_translate("Dialog", "0"))
+        item.setText(_translate("Dialog", str(emoCount["happy"])))
         item = self.tableWidget.item(4, 0)
-        item.setText(_translate("Dialog", "0"))
+        item.setText(_translate("Dialog", str(emoCount["sad"])))
         item = self.tableWidget.item(5, 0)
-        item.setText(_translate("Dialog", "0"))
+        item.setText(_translate("Dialog", str(emoCount["surprise"])))
         item = self.tableWidget.item(6, 0)
-        item.setText(_translate("Dialog", "0"))
+        item.setText(_translate("Dialog", str(emoCount["neutral"])))
         self.tableWidget.setSortingEnabled(__sortingEnabled)
         self.pushButton.setText(_translate("Dialog", "Start"))
         self.pushButton_2.setText(_translate("Dialog", "End"))
