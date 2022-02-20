@@ -18,7 +18,9 @@ import numpy as np
 import collections
 import threading
 import pyautogui
+from pyqtgraph import PlotWidget
 
+_translate = QtCore.QCoreApplication.translate
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
@@ -64,7 +66,7 @@ class Ui_Dialog(object):
         self.pushButton_2 = QtWidgets.QPushButton(Dialog)
         self.pushButton_2.setGeometry(QtCore.QRect(610, 260, 75, 23))
         self.pushButton_2.setObjectName("pushButton_2")
-        self.graphicsView = QtWidgets.QGraphicsView(Dialog)
+        self.graphicsView = PlotWidget(Dialog)
         self.graphicsView.setGeometry(QtCore.QRect(190, 10, 491, 241))
         self.graphicsView.setObjectName("graphicsView")
 
@@ -112,7 +114,7 @@ class Ui_Dialog(object):
 
 def processImageThread(success,img):
     while success:
-        success,img = vidcap.read()
+        success,img = cv2.vidcap.read()
         #emotions = collections.deque(np.zeros(shape=(20,7)))
         emotions = helper.processFrame(img)
         helper.updateEmotionValues(emotions,ui,_translate)
