@@ -3,6 +3,7 @@ import json
 import cv2
 import helper
 import numpy as np
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 trained_face_data = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
@@ -36,3 +37,23 @@ def processFrame(img):
         addToAverages(avg_array, obj)
         #cv2.waitKey(0)
     return (avg_array/len(img_crop))
+
+def updateEmotionValues(emotions, ui,_translate):
+    # QtCore.QMetaObject.invokeMethod(ui.Angry,"setText", QtCore.Qt.QueuedConnection, QtCore.Q_ARG(str, "ABC"))
+    # QtCore.QMetaObject.invokeMethod(ui.Angry, "setText",QtCore.Qt.QueuedConnection, QtCore.Q_ARG(int, emotions[0]))
+    # QtCore.QMetaObject.invokeMethod(ui.Disgust, "setText",QtCore.Qt.QueuedConnection, QtCore.Q_ARG(str, emotions[1]))
+    # QtCore.QMetaObject.invokeMethod(ui.Fear, "setText",QtCore.Qt.QueuedConnection, QtCore.Q_ARG(str, emotions[2]))
+    # QtCore.QMetaObject.invokeMethod(ui.Happy, "setText",QtCore.Qt.QueuedConnection, QtCore.Q_ARG(str, emotions[3]))
+    # QtCore.QMetaObject.invokeMethod(ui.Sad, "setText",QtCore.Qt.QueuedConnection, QtCore.Q_ARG(str, emotions[4]))
+    # QtCore.QMetaObject.invokeMethod(ui.Surprise, "setText",QtCore.Qt.QueuedConnection, QtCore.Q_ARG(str, emotions[5]))
+    # QtCore.QMetaObject.invokeMethod(ui.Neutral, "setText",QtCore.Qt.QueuedConnection, QtCore.Q_ARG(str, emotions[6]))
+    emotions[np.isnan(emotions)] = 0
+    print(str(int(emotions[0])))
+    #ui.Angry.setText(_translate("Dialog", "0"))
+    ui.Angry.setText(_translate("Dialog", str(int(emotions[0])) + "%"))
+    ui.Disgust.setText(_translate("Dialog", str(int(emotions[1])) + "%"))
+    ui.Fear.setText(_translate("Dialog", str(int(emotions[2])) + "%"))
+    ui.Happy.setText(_translate("Dialog", str(int(emotions[3])) + "%"))
+    ui.Sad.setText(_translate("Dialog", str(int(emotions[4])) + "%"))
+    ui.Surprise.setText(_translate("Dialog", str(int(emotions[5])) + "%"))
+    ui.Neutral.setText(_translate("Dialog", str(int(emotions[6])) + "%"))

@@ -9,7 +9,15 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import helper
+import cv2
+import matplotlib.pyplot as plt
+from deepface import DeepFace
+import json
+import numpy as np
+import collections
+import threading
+import pyautogui
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -84,25 +92,38 @@ class Ui_Dialog(object):
         item.setText(_translate("Dialog", "Count"))
         __sortingEnabled = self.tableWidget.isSortingEnabled()
         self.tableWidget.setSortingEnabled(False)
-        item = self.tableWidget.item(0, 0)
-        item.setText(_translate("Dialog", "0"))
-        item = self.tableWidget.item(1, 0)
-        item.setText(_translate("Dialog", "0"))
-        item = self.tableWidget.item(2, 0)
-        item.setText(_translate("Dialog", "0"))
-        item = self.tableWidget.item(3, 0)
-        item.setText(_translate("Dialog", "0"))
-        item = self.tableWidget.item(4, 0)
-        item.setText(_translate("Dialog", "0"))
-        item = self.tableWidget.item(5, 0)
-        item.setText(_translate("Dialog", "0"))
-        item = self.tableWidget.item(6, 0)
-        item.setText(_translate("Dialog", "0"))
+        self.Angry = self.tableWidget.item(0, 0)
+        self.Angry.setText(_translate("Dialog", "0"))
+        self.Disgust = self.tableWidget.item(1, 0)
+        self.Disgust.setText(_translate("Dialog", "0"))
+        self.Fear = self.tableWidget.item(2, 0)
+        self.Fear.setText(_translate("Dialog", "0"))
+        self.Happy = self.tableWidget.item(3, 0)
+        self.Happy.setText(_translate("Dialog", "0"))
+        self.Sad = self.tableWidget.item(4, 0)
+        self.Sad.setText(_translate("Dialog", "0"))
+        self.Surprise = self.tableWidget.item(5, 0)
+        self.Surprise.setText(_translate("Dialog", "0"))
+        self.Neutral = self.tableWidget.item(6, 0)
+        self.Neutral.setText(_translate("Dialog", "0"))
         self.tableWidget.setSortingEnabled(__sortingEnabled)
         self.pushButton.setText(_translate("Dialog", "Start"))
         self.pushButton_2.setText(_translate("Dialog", "End"))
 
+def processImageThread(success,img):
+    while success:
+        success,img = vidcap.read()
+        #emotions = collections.deque(np.zeros(shape=(20,7)))
+        emotions = helper.processFrame(img)
+        helper.updateEmotionValues(emotions,ui,_translate)
+        print(f'Read frame count {count} with success: {success}')
 
+def takeScreenshots():
+    img = pyautogui.screenshot()
+    open_cv_image = np.array(img)
+    emotions = helper.processFrame(open_cv_image)
+    helper.updateEmotionValues(emotions,ui,_translate)
+    
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
@@ -110,4 +131,9 @@ if __name__ == "__main__":
     ui = Ui_Dialog()
     ui.setupUi(Dialog)
     Dialog.show()
+    
+    timer = QtCore.QTimer()
+    timer.timeout.connect(takeScreenshots)
+    timer.start(2000)
+    
     sys.exit(app.exec_())
