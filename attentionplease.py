@@ -28,6 +28,7 @@ import random
 import time
 #import pyqtgraph as pg
 
+_translate = QtCore.QCoreApplication.translate
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
