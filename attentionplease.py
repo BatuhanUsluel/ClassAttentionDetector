@@ -9,15 +9,24 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QDialog, QApplication, QPushButton, QVBoxLayout
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 import helper
 import cv2
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 from deepface import DeepFace
 import json
 import numpy as np
 import collections
 import threading
 import pyautogui
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
+from matplotlib.figure import Figure
+import random
+import time
+#import pyqtgraph as pg
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -65,9 +74,18 @@ class Ui_Dialog(object):
         self.pushButton_2.setGeometry(QtCore.QRect(610, 260, 75, 23))
         self.pushButton_2.setObjectName("pushButton_2")
         self.graphicsView = QtWidgets.QGraphicsView(Dialog)
+        #self.graphicsView = QtWidgets.QVBoxLayout()
         self.graphicsView.setGeometry(QtCore.QRect(190, 10, 491, 241))
         self.graphicsView.setObjectName("graphicsView")
 
+        # self.myFig = MyFigureCanvas(x_len=200, y_range=[0, 100], interval=20)
+        # self.graphicsView.addWidget(self.myFig)
+
+        # 3. Show
+        #self.graphicsView.add
+
+        #self.graphWidget = pg.PlotWidget()
+        #self.setCentralWidget(self.graphicsView)
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
@@ -110,16 +128,17 @@ class Ui_Dialog(object):
         self.pushButton.setText(_translate("Dialog", "Start"))
         self.pushButton_2.setText(_translate("Dialog", "End"))
 
-def processImageThread(success,img):
-    while success:
-        success,img = vidcap.read()
-        #emotions = collections.deque(np.zeros(shape=(20,7)))
-        emotions = helper.processFrame(img)
-        helper.updateEmotionValues(emotions,ui,_translate)
-        print(f'Read frame count {count} with success: {success}')
+# def processImageThread(success,img):
+#     while success:
+#         success,img = vidcap.read()
+#         #emotions = collections.deque(np.zeros(shape=(20,7)))
+#         emotions = helper.processFrame(img)
+#         helper.updateEmotionValues(emotions,ui,_translate)
+#         print(f'Read frame count {count} with success: {success}')
 
 def takeScreenshots():
     img = pyautogui.screenshot()
+    _translate = QtCore.QCoreApplication.translate
     open_cv_image = np.array(img)
     emotions = helper.processFrame(open_cv_image)
     helper.updateEmotionValues(emotions,ui,_translate)
